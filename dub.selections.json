@@ -1,0 +1,14 @@
+{
+	"fileVersion": 1,
+	"versions": {
+		"bindbc-loader": "1.0.1",
+		"bindbc-opengl": "1.0.2",
+		"fghj": "1.0.0",
+		"imagefmt": "2.1.2",
+		"inmath": "1.0.3",
+		"inochi2d": "0.7.2",
+		"mir-algorithm": "3.14.1",
+		"mir-core": "1.1.109",
+		"silly": "1.1.1"
+	}
+}

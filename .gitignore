@@ -1,0 +1,15 @@
+.dub
+docs.json
+__dummy.html
+docs/
+/inochi2d-c
+inochi2d-c.so
+inochi2d-c.dylib
+inochi2d-c.dll
+inochi2d-c.a
+inochi2d-c.lib
+inochi2d-c-test-*
+*.exe
+*.o
+*.obj
+*.lst

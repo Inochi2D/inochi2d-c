@@ -15,7 +15,7 @@ alias i2DTimingFuncSignature = extern(C) double function();
 */
 void inInit(i2DTimingFuncSignature func) {
     Runtime.initialize();
-    Inochi2D.inInit(() { return func(); });
+    Inochi2D.inInit(&func);
 }
 
 /**

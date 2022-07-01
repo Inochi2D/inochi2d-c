@@ -31,10 +31,20 @@ private:
 }
 
 /**
-    Loads a puppet from 
+    Loads a puppet from path
 */
 InPuppet* inLoadPuppet(const(char)* path) {
     auto puppet = new InPuppet(Inochi2D.inLoadPuppet(cast(string)path.fromStringz));
+    GC.addRoot(puppet);
+    return puppet;
+}
+
+
+/**
+    Loads a puppet from path (length denominated string)
+*/
+InPuppet* inLoadPuppetEx(const(char)* path, size_t length) {
+    auto puppet = new InPuppet(Inochi2D.inLoadPuppet(cast(string)path[0..length]));
     GC.addRoot(puppet);
     return puppet;
 }

@@ -1,4 +1,4 @@
-# Inochi2D C ABI
+# Inochi2D SDK for C ABIs
 This repository contains the neccesary code to use the reference Inochi2D implementation outside of DLang, as well as with non-Inochi2D renderers.
 
 
@@ -39,9 +39,11 @@ Inochi2D requires the following GPU accellerated features to be present:
  * sRGB->Linear RGB conversion support
  * Premultiplied Alpha support
  * Vertex buffers
+ * Stencil buffers
  * Pixel shaders
  * ROP support or method to emulate porter-duff blending in shader
  * At least 4096x4096 texture resolution support
-Optionally the following features may be present
+
+Optionally the following features may be present  
  * SPIR-v shader support (For per-part shaders)
 

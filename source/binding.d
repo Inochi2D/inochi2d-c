@@ -37,6 +37,13 @@ InPuppet* inLoadPuppet(const(char)* path) {
 }
 
 /**
+    Loads a puppet from memory
+*/
+InPuppet* inLoadPuppetFromMemory(ubyte* data, size_t length) {
+    return new InPuppet(Inochi2D.inLoadINPPuppet(data[0..length]));
+}
+
+/**
     Destroys a puppet and unloads its
 */
 void inDestroyPuppet(InPuppet* puppet) {

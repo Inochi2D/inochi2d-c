@@ -34,4 +34,14 @@ Use `inDestroyPuppet` to destroy a puppet when it no longer is needed.
 ```
 
 ## Using Inochi2D with your own renderer
-TODO
+Inochi2D requires the following GPU accellerated features to be present:
+ * Framebuffer support (Inochi2D needs 2)
+ * sRGB->Linear RGB conversion support
+ * Premultiplied Alpha support
+ * Vertex buffers
+ * Pixel shaders
+ * ROP support or method to emulate porter-duff blending in shader
+ * At least 4096x4096 texture resolution support
+Optionally the following features may be present
+ * SPIR-v shader support (For per-part shaders)
+

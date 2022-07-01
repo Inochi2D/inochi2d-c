@@ -1,6 +1,7 @@
 module binding;
 import std.string : fromStringz;
 import Inochi2D = inochi2d;
+import inochi2d.integration;
 import core.runtime;
 import core.memory;
 
@@ -14,7 +15,7 @@ alias i2DTimingFuncSignature = extern(C) double function();
 */
 void inInit(i2DTimingFuncSignature func) {
     Runtime.initialize();
-    Inochi2D.inInit((double) { return func(); });
+    Inochi2D.inInit(() { return func(); });
 }
 
 /**
@@ -24,17 +25,27 @@ void inCleanup() {
     Runtime.terminate();
 }
 
+struct InRenderable {
+private:
+
+}
 
 struct InPuppet {
 private:
     Inochi2D.Puppet puppet;
+    TextureBlob[] blob;
 }
 
 /**
     Loads a puppet from path
 */
 InPuppet* inLoadPuppet(const(char)* path) {
-    auto puppet = new InPuppet(Inochi2D.inLoadPuppet(cast(string)path.fromStringz));
+    auto puppet = new InPuppet(
+        Inochi2D.inLoadPuppet(cast(string)path.fromStringz),
+        inCurrentPuppetTextureSlots.dup
+    );
+    inCurrentPuppetTextureSlots.length = 0;
+
     GC.addRoot(puppet);
     return puppet;
 }
@@ -44,7 +55,12 @@ InPuppet* inLoadPuppet(const(char)* path) {
     Loads a puppet from path (length denominated string)
 */
 InPuppet* inLoadPuppetEx(const(char)* path, size_t length) {
-    auto puppet = new InPuppet(Inochi2D.inLoadPuppet(cast(string)path[0..length]));
+    auto puppet = new InPuppet(
+        Inochi2D.inLoadPuppet(cast(string)path[0..length]),
+        inCurrentPuppetTextureSlots.dup
+    );
+    inCurrentPuppetTextureSlots.length = 0;
+
     GC.addRoot(puppet);
     return puppet;
 }

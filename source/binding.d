@@ -2,6 +2,7 @@ module binding;
 import std.string : fromStringz;
 import Inochi2D = inochi2d;
 import core.runtime;
+import core.memory;
 
 // Everything here should be C ABI compatible
 extern(C):
@@ -33,19 +34,25 @@ private:
     Loads a puppet from 
 */
 InPuppet* inLoadPuppet(const(char)* path) {
-    return new InPuppet(Inochi2D.inLoadPuppet(cast(string)path.fromStringz));
+    auto puppet = new InPuppet(Inochi2D.inLoadPuppet(cast(string)path.fromStringz));
+    GC.addRoot(puppet);
+    return puppet;
 }
 
 /**
     Loads a puppet from memory
 */
 InPuppet* inLoadPuppetFromMemory(ubyte* data, size_t length) {
-    return new InPuppet(Inochi2D.inLoadINPPuppet(data[0..length]));
+    auto puppet = new InPuppet(Inochi2D.inLoadINPPuppet(data[0..length]));
+    GC.addRoot(puppet);
+    return puppet;
 }
 
 /**
     Destroys a puppet and unloads its
 */
 void inDestroyPuppet(InPuppet* puppet) {
+    GC.removeRoot(puppet);
     destroy(puppet);
+    GC.collect();
 }

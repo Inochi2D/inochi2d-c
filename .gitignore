@@ -13,3 +13,4 @@ inochi2d-c-test-*
 *.o
 *.obj
 *.lst
+out/

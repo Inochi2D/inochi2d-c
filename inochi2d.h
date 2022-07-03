@@ -7,7 +7,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#ifdef H_INOCHI2D
+#ifndef H_INOCHI2D
 #define H_INOCHI2D
 
     struct InPuppet;

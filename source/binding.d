@@ -6,6 +6,7 @@ import core.runtime;
 import core.memory;
 import core.sys.windows.windows;
 import core.sys.windows.dll;
+import bindbc.opengl;
 
 // This needs to be here for Windows to link properly
 version(Windows) {
@@ -25,6 +26,9 @@ extern(C):
 export
 void inInit(i2DTimingFuncSignature func) {
     version(NotWindows) Runtime.initialize();
+    version(yesgl) {
+        loadOpenGL();
+    }
     Inochi2D.inInit(func);
 }
 
@@ -33,6 +37,9 @@ void inInit(i2DTimingFuncSignature func) {
 */
 export
 void inCleanup() {
+    version(yesgl) {
+        unloadOpenGL();
+    }
     version(NotWindows) Runtime.terminate();
 }
 

@@ -9,10 +9,10 @@ targetPath "out/"
 
 toolchainRequirements dmd="no" gdc="no" ldc=">=1.11.0"
 
-dflags "--mscrtlib=msvcrt" platform="windows-ldc" // Use the dynamic CRT on Windows.
+dflags "-mscrtlib=msvcrt" platform="windows-ldc" // Use the dynamic CRT on Windows.
 dflags "-flto=full" platform="ldc"
-dflags "--fvisibility=hidden" platform="ldc"
-dflags "--static" platform="ldc"
+dflags "-fvisibility=hidden" platform="ldc"
+dflags "-link-defaultlib-shared=false" platform="ldc"
 dflags "-d-version=GL_ARB" platform="ldc"
 
 configuration "nogl" {

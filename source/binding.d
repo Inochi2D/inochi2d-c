@@ -26,6 +26,23 @@ alias i2DTimingFuncSignature = double function();
 // Everything here should be C ABI compatible
 extern(C):
 
+struct InRenderable {
+private:
+
+}
+
+struct InPuppet {
+private:
+    Inochi2D.Puppet puppet;
+    TextureBlob[] blob;
+}
+
+
+
+//
+//  INOCHI2D CORE
+//
+
 /**
     Initializes Inochi2D
 */
@@ -49,16 +66,35 @@ void inCleanup() {
     version(NotWindows) Runtime.terminate();
 }
 
-struct InRenderable {
-private:
+version (yesgl) {
+    /**
+        Begins a scene render
+    */
+    export
+    void inBeginScene() {
+        Inochi2D.inBeginScene();
+    }
 
+    /**
+        Ends a scene render
+    */
+    export
+    void inEndScene() {
+        Inochi2D.inEndScene();
+    }
+
+    /**
+        Draws Inochi2D scene
+    */
+    export
+    void inDrawScene(float x, float y, float width, float height) {
+        Inochi2D.inDrawScene(vec4(x, y, width, height));
+    }
 }
 
-struct InPuppet {
-private:
-    Inochi2D.Puppet puppet;
-    TextureBlob[] blob;
-}
+//
+//  PUPPET
+//
 
 /**
     Loads a puppet from path
@@ -117,4 +153,14 @@ void inDestroyPuppet(InPuppet* puppet) {
 export
 void inPuppetUpdate(InPuppet* puppet) {
     puppet.puppet.update();
+}
+
+version (yesgl) {
+
+    /**
+        Draw puppet
+    */
+    void inPuppetDraw(InPuppet* puppet) {
+        puppet.puppet.draw();
+    }
 }

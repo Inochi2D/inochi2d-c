@@ -104,3 +104,11 @@ void inDestroyPuppet(InPuppet* puppet) {
     destroy(puppet);
     GC.collect();
 }
+
+/**
+    Update puppet
+*/
+export
+void inPuppetUpdate(InPuppet* puppet) {
+    puppet.puppet.update();
+}

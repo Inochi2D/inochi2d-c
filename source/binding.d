@@ -10,6 +10,8 @@ import core.sys.windows.dll;
 // This needs to be here for Windows to link properly
 version(Windows) {
     mixin SimpleDllMain;
+} else {
+    version = NotWindows;
 }
 
 alias i2DTimingFuncSignature = double function();
@@ -22,7 +24,7 @@ extern(C):
 */
 export
 void inInit(i2DTimingFuncSignature func) {
-    Runtime.initialize();
+    version(NotWindows) Runtime.initialize();
     Inochi2D.inInit(func);
 }
 
@@ -31,7 +33,7 @@ void inInit(i2DTimingFuncSignature func) {
 */
 export
 void inCleanup() {
-    Runtime.terminate();
+    version(NotWindows) Runtime.terminate();
 }
 
 struct InRenderable {

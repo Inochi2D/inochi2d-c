@@ -32,6 +32,9 @@
     void inCameraSetPosition(InCamera* camera, float x, float y);
     void inCameraGetZoom(InCamera* camera, float* zoom);
     void inCameraSetZoom(InCamera* camera, float zoom);
+    void inCameraGetCenterOffset(InCamera* camera, float* x, float* y);
+    void inCameraGetRealSize(InCamera* camera, float* x, float* y);
+    void inCameraGetMatrix(InCamera* camera, float* mat4); // NOTE: mat4 array needs to be 16 elements long.
 
     // Inochi2D Puppets
     InPuppet* inPuppetLoad(const char *path);

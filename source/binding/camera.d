@@ -35,17 +35,43 @@ void inCameraGetPosition(InCamera* camera, float* x, float* y) {
 
 
 /**
-    Sets the position of a camera
+    Sets the zoom of a camera
 */
 void inCameraSetZoom(InCamera* camera, float zoom) {
     camera.camera.scale = vec2(zoom, zoom);
 }
 
 /**
-    Sets the position of a camera
+    Gets the zoom of a camera
 */
 void inCameraGetZoom(InCamera* camera, float* zoom) {
     *zoom = camera.camera.position.x;
+}
+
+/**
+    Gets the center offset of the camera
+*/
+void inCameraGetCenterOffset(InCamera* camera, float* x, float* y) {
+    auto v = camera.camera.getCenterOffset;
+    *x = v.x;
+    *y = v.y;
+}
+
+/**
+    Gets the "real size" from the camera
+*/
+void inCameraGetRealSize(InCamera* camera, float* x, float* y) {
+    auto v = camera.camera.getRealSize;
+    *x = v.x;
+    *y = v.y;
+}
+
+/**
+    Copies the values of the internal camera matrix out to mat4
+*/
+void inCameraGetMatrix(InCamera* camera, const(float)* mat4) {
+    import core.stdc.string : memcpy;
+    memcpy(cast(void*)mat4, camera.camera.matrix.ptr, float.sizeof*16);
 }
 
 /**

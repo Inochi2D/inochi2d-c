@@ -17,6 +17,8 @@
     // Inochi2D runtime functionality
     void inInit(double (*timingFunc)());
     void inCleanup();
+    void inViewportSet(float width, float height);
+    void inViewportGet(float* width, float* height);
     #ifdef INOCHI2D_GLYES
         void inSceneBegin();
         void inSceneEnd();

@@ -13,18 +13,24 @@ extern(C) export:
 struct InPuppet {
 private:
     Inochi2D.Puppet puppet;
-    TextureBlob[] blob;
+    version(yesgl) TextureBlob[] blob;
 }
 
 /**
     Loads a puppet from path
 */
 InPuppet* inPuppetLoad(const(char)* path) {
-    auto puppet = new InPuppet(
-        Inochi2D.inLoadPuppet(cast(string)path.fromStringz),
-        inCurrentPuppetTextureSlots.dup
-    );
-    inCurrentPuppetTextureSlots.length = 0;
+    version(yesgl) {
+        auto puppet = new InPuppet(
+            Inochi2D.inLoadPuppet(cast(string)path.fromStringz)
+        );
+    } else {
+        auto puppet = new InPuppet(
+            Inochi2D.inLoadPuppet(cast(string)path.fromStringz),
+            inCurrentPuppetTextureSlots.dup
+        );
+        inCurrentPuppetTextureSlots.length = 0;
+    }
 
     GC.addRoot(puppet);
     return puppet;
@@ -35,11 +41,17 @@ InPuppet* inPuppetLoad(const(char)* path) {
     Loads a puppet from path (length denominated string)
 */
 InPuppet* inPuppetLoadEx(const(char)* path, size_t length) {
-    auto puppet = new InPuppet(
-        Inochi2D.inLoadPuppet(cast(string)path[0..length]),
-        inCurrentPuppetTextureSlots.dup
-    );
-    inCurrentPuppetTextureSlots.length = 0;
+    version(yesgl) {
+        auto puppet = new InPuppet(
+            Inochi2D.inLoadPuppet(cast(string)path[0..length])
+        );
+    } else {
+        auto puppet = new InPuppet(
+            Inochi2D.inLoadPuppet(cast(string)path[0..length]),
+            inCurrentPuppetTextureSlots.dup
+        );
+        inCurrentPuppetTextureSlots.length = 0;
+    }
 
     GC.addRoot(puppet);
     return puppet;
@@ -49,7 +61,17 @@ InPuppet* inPuppetLoadEx(const(char)* path, size_t length) {
     Loads a puppet from memory
 */
 InPuppet* inPuppetLoadFromMemory(ubyte* data, size_t length) {
-    auto puppet = new InPuppet(Inochi2D.inLoadINPPuppet(data[0..length]));
+    version(yesgl) {
+        auto puppet = new InPuppet(
+            Inochi2D.inLoadINPPuppet(data[0..length])
+        );
+    } else {
+        auto puppet = new InPuppet(
+            Inochi2D.inLoadINPPuppet(data[0..length]),
+            inCurrentPuppetTextureSlots.dup
+        );
+        inCurrentPuppetTextureSlots.length = 0;
+    }
     GC.addRoot(puppet);
     return puppet;
 }

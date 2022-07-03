@@ -9,10 +9,16 @@ targetPath "out/"
 
 toolchainRequirements dmd="no" gdc="no" ldc=">=1.11.0"
 
-subConfiguration "inochi2d" "renderless-nover"
-
 dflags "--mscrtlib=msvcrt" platform="windows-ldc" // Use the dynamic CRT on Windows.
 dflags "-flto=full" platform="windows-ldc"
 dflags "--fvisibility=hidden" platform="windows-ldc"
 dflags "--static" platform="windows-ldc"
 dflags "-d-version=GL_ARB" platform="windows-ldc"
+
+configuration "nogl" {
+    subConfiguration "inochi2d" "renderless"
+}
+
+configuration "yesgl" {
+    subConfiguration "inochi2d" "full"
+}

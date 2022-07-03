@@ -10,10 +10,10 @@ targetPath "out/"
 toolchainRequirements dmd="no" gdc="no" ldc=">=1.11.0"
 
 dflags "--mscrtlib=msvcrt" platform="windows-ldc" // Use the dynamic CRT on Windows.
-dflags "-flto=full" platform="windows-ldc"
-dflags "--fvisibility=hidden" platform="windows-ldc"
-dflags "--static" platform="windows-ldc"
-dflags "-d-version=GL_ARB" platform="windows-ldc"
+dflags "-flto=full" platform="ldc"
+dflags "--fvisibility=hidden" platform="ldc"
+dflags "--static" platform="ldc"
+dflags "-d-version=GL_ARB" platform="ldc"
 
 configuration "nogl" {
     subConfiguration "inochi2d" "renderless"
@@ -21,4 +21,5 @@ configuration "nogl" {
 
 configuration "yesgl" {
     subConfiguration "inochi2d" "full"
+    versions "yesgl"
 }

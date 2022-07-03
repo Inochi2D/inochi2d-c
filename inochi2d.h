@@ -29,7 +29,7 @@
     void inCameraGetPosition(InCamera* camera, float* x, float* y);
     void inCameraSetPosition(InCamera* camera, float x, float y);
     void inCameraGetZoom(InCamera* camera, float* zoom);
-    void inCameraSetZoom(InCamera* camera, float* zoom);
+    void inCameraSetZoom(InCamera* camera, float zoom);
 
     // Inochi2D Puppets
     InPuppet* inPuppetLoad(const char *path);

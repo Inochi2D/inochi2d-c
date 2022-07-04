@@ -90,3 +90,15 @@ version (yesgl) {
         Inochi2D.inDrawScene(vec4(x, y, width, height));
     }
 }
+
+/**
+    Runs function in a protected block that catches D exceptions.
+*/
+void inBlockProtected(void function() func) {
+    try {
+        func();
+    } catch(Exception ex) {
+        import std.stdio : writeln;
+        writeln(ex);
+    }
+}

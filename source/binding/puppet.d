@@ -13,7 +13,7 @@ extern(C) export:
 struct InPuppet {
 private:
     Inochi2D.Puppet puppet;
-    version(yesgl) TextureBlob[] blob;
+    version(nogl) TextureBlob[] blob;
 }
 
 /**

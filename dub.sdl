@@ -17,6 +17,7 @@ dflags "-d-version=GL_ARB" platform="ldc"
 
 configuration "nogl" {
     subConfiguration "inochi2d" "renderless"
+    versions "nogl"
 }
 
 configuration "yesgl" {

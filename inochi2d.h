@@ -10,6 +10,11 @@
 #ifndef H_INOCHI2D
 #define H_INOCHI2D
 
+    struct InError {
+        size_t len;
+        const char* msg;
+    }
+
     struct InPuppet;
     struct InCamera;
     struct InRenderable;
@@ -41,10 +46,11 @@
     InPuppet* inPuppetLoad(const char *path);
     InPuppet* inPuppetLoadEx(const char *path, size_t length);
     InPuppet* inPuppetLoadFromMemory(uint8_t* data, size_t length);
-    void inPuppetDestroy(InPuppet*);
-    void inPuppetUpdate(InPuppet*);
+    void inPuppetDestroy(InPuppet* puppet);
+    void inPuppetGetName(InPuppet* puppet, const char *text, size_t *len);
+    void inPuppetUpdate(InPuppet* puppet);
     #ifdef INOCHI2D_GLYES
-        void inPuppetDraw(InPuppet*);
+        void inPuppetDraw(InPuppet* puppet);
     #endif
 
 

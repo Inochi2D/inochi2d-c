@@ -41,6 +41,13 @@ void inInit(i2DTimingFuncSignature func) {
 }
 
 /**
+    Updates the Inochi2D timing systems
+*/
+void inUpdate() {
+    Inochi2D.inUpdate();
+}
+
+/**
     Uninitializes Inochi2D and cleans up everything
 */
 void inCleanup() {

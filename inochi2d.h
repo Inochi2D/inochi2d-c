@@ -14,6 +14,7 @@
         size_t len;
         const char* msg;
     }
+    InError* inErrorGet();
 
     struct InPuppet;
     struct InCamera;
@@ -22,6 +23,7 @@
     // Inochi2D runtime functionality
     void inInit(double (*timingFunc)());
     void inCleanup();
+    void inUpdate();
     void inBlockProtected(void (*func)());
     void inViewportSet(float width, float height);
     void inViewportGet(float* width, float* height);

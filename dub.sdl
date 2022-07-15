@@ -15,6 +15,8 @@ dflags "-fvisibility=hidden" platform="ldc"
 dflags "-link-defaultlib-shared=false" platform="ldc"
 dflags "-d-version=GL_ARB" platform="ldc"
 
+copyFiles "*/inochi2d-c.lib" platform="windows-ldc" // On Windows, copy the lib file to allow usage of link.exe
+
 configuration "nogl" {
     subConfiguration "inochi2d" "renderless"
     versions "nogl"

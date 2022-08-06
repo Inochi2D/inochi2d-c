@@ -13,12 +13,13 @@
     struct InError {
         size_t len;
         const char* msg;
-    }
+    };
+    typedef struct InError InError;
     InError* inErrorGet();
 
-    struct InPuppet;
-    struct InCamera;
-    struct InRenderable;
+    typedef struct InPuppet InPuppet;
+    typedef struct InCamera InCamera;
+    typedef struct InRenderable InRenderable;
 
     // Inochi2D runtime functionality
     void inInit(double (*timingFunc)());

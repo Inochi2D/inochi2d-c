@@ -10,6 +10,10 @@
 #ifndef H_INOCHI2D
 #define H_INOCHI2D
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
     struct InError {
         size_t len;
         const char* msg;
@@ -56,6 +60,10 @@
         void inPuppetDraw(InPuppet* puppet);
     #endif
 
+
+#ifdef __cplusplus
+}
+#endif
 
 
 #endif

@@ -4,11 +4,9 @@ import binding;
 import binding.err;
 import binding.puppet;
 import binding.nodes: InNode;
-import std.stdio;
-import std.string;
 import inochi2d;
-import core.stdc.stdlib;
 import core.stdc.string;
+import utils;
 
 // Everything here should be C ABI compatible
 extern(C) export:
@@ -18,12 +16,7 @@ bool inDrawableGetVertices(InNode* node, float** vertices, size_t* length) {
     if (drawable is null)
         return false;
 
-    *vertices = cast(float*)malloc(drawable.vertices.length * float.sizeof * 2);
-    *length   = drawable.vertices.length;
-    foreach (i, vertex; drawable.vertices) {
-        (*vertices)[i * 2] = vertex.x;
-        (*vertices)[i * 2 + 1] = vertex.y;
-    }
+    vec2array2farray(drawable.vertices, *vertices, *length);
     return true;
 }
 
@@ -32,11 +25,8 @@ bool inDrawableSetVertices(InNode* node, float* vertices, size_t length) {
     if (drawable is null)
         return false;
 
-    drawable.vertices.length = length;
-    foreach (i; 0..length) {
-        drawable.vertices[i].x = vertices[i * 2];
-        drawable.vertices[i].y = vertices[i * 2 + 1];
-    }
+    drawable.vertices.length = length / 2;
+    memcpy(drawable.vertices.ptr, vertices, length * float.sizeof);
     return true;
 }
 

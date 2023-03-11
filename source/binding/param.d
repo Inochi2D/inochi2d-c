@@ -3,11 +3,7 @@ module binding.param;
 import binding;
 import binding.err;
 import binding.puppet;
-import std.stdio;
-import std.string;
 import inochi2d;
-import core.stdc.stdlib;
-import core.stdc.string;
 import utils;
 
 // Everything here should be C ABI compatible
@@ -67,17 +63,6 @@ void inParameterGetAxes(InParameter* param, float*** axes, size_t* xLength, size
         array2carray!(float, float)(points, result, *(length[index++]));
         return result;
     })(param.param.axisPoints, *axes, dummy);
-    /*
-    float* dummy;
-    float** result = cast(float**)malloc(2 * dummy.sizeof);
-    result[0] = cast(float*)malloc(param.param.axisPoints[0].length * float.sizeof);
-    memcpy(result[0], param.param.axisPoints[0].ptr, param.param.axisPoints[0].length * float.sizeof);
-    result[1] = cast(float*)malloc(param.param.axisPoints[1].length * float.sizeof);
-    memcpy(result[1], param.param.axisPoints[1].ptr, param.param.axisPoints[1].length * float.sizeof);
-    *axes = result;
-    *xLength = param.param.axisPoints[0].length;
-    *yLength = param.param.axisPoints[1].length;
-    */
 }
 
 void inParameterFindClosestKeypoint(InParameter* param, float x, float y, uint* index_x, uint* index_y) {

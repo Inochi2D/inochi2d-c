@@ -1,5 +1,5 @@
 module utils;
-
+import inochi2d;
 import core.stdc.stdlib;
 import core.stdc.string;
 
@@ -26,6 +26,14 @@ void array2carray(T1, T2, alias Convert = id!(T1, T2))(T1[] in_arr, out T2* arr,
     foreach (i, a; in_arr) {
         result[i] = Convert(a);
     }
+}
+
+void vec2array2farray(vec2[] in_arr, out float* arr, out size_t length) {
+    vec2* varr;
+    size_t vlen;
+    array2carray!(vec2, vec2)(in_arr, varr, vlen);
+    arr = cast(float*)varr;
+    length = vlen * 2;
 }
 
 T2* alloc(T1, T2)(T1 obj) {

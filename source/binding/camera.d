@@ -5,7 +5,6 @@ import binding;
 extern(C) export:
 
 struct InCamera {
-private:
     Inochi2D.Camera camera;
 }
 
@@ -45,7 +44,7 @@ void inCameraSetZoom(InCamera* camera, float zoom) {
     Gets the zoom of a camera
 */
 void inCameraGetZoom(InCamera* camera, float* zoom) {
-    *zoom = camera.camera.position.x;
+    *zoom = camera.camera.scale.x;
 }
 
 /**

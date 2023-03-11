@@ -7,12 +7,12 @@
 module binding.puppet;
 import binding;
 import binding.err;
+import std.stdio;
 
 // Everything here should be C ABI compatible
 extern(C) export:
 
 struct InPuppet {
-private:
     Inochi2D.Puppet puppet;
     version(nogl) TextureBlob[] blob;
 }
@@ -37,6 +37,7 @@ InPuppet* inPuppetLoad(const(char)* path) {
         GC.addRoot(puppet);
         return puppet;
     } catch(Exception ex) {
+        writeln(ex);
         setError(ex);
         return null;
     }
@@ -104,7 +105,7 @@ void inPuppetDestroy(InPuppet* puppet) {
 /**
     Gets the name of a puppet (as written in metadata)
 */
-void inPuppetGetName(InPuppet* puppet, const(char)* ptr, size_t* len) {
+void inPuppetGetName(InPuppet* puppet, const(char)** ptr, size_t* len) {
     import core.stdc.string : memcpy;
     import core.stdc.stdlib : malloc;
 
@@ -113,7 +114,7 @@ void inPuppetGetName(InPuppet* puppet, const(char)* ptr, size_t* len) {
 
     const(char)* str = cast(const(char)*)malloc(puppet.puppet.meta.name.length);
     memcpy(cast(void*)str, cast(void*)puppet.puppet.meta.name.ptr, puppet.puppet.meta.name.length);
-    ptr = str;
+    *ptr = str;
     *len = puppet.puppet.meta.name.length;
 }
 
@@ -132,4 +133,8 @@ version (yesgl) {
     void inPuppetDraw(InPuppet* puppet) {
         puppet.puppet.draw();
     }
+}
+
+void inNodeResetDrivers(InPuppet* puppet) {
+    puppet.puppet.resetDrivers();
 }

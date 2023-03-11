@@ -10,15 +10,20 @@
 #ifndef H_INOCHI2D
 #define H_INOCHI2D
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
     struct InError {
         size_t len;
         const char* msg;
-    }
+    };
+    typedef struct InError InError;
     InError* inErrorGet();
 
-    struct InPuppet;
-    struct InCamera;
-    struct InRenderable;
+    typedef struct InPuppet InPuppet;
+    typedef struct InCamera InCamera;
+    typedef struct InRenderable InRenderable;
 
     // Inochi2D runtime functionality
     void inInit(double (*timingFunc)());
@@ -55,6 +60,10 @@
         void inPuppetDraw(InPuppet* puppet);
     #endif
 
+
+#ifdef __cplusplus
+}
+#endif
 
 
 #endif

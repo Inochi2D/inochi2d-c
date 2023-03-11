@@ -8,6 +8,7 @@ import std.string;
 import inochi2d;
 import core.stdc.stdlib;
 import core.stdc.string;
+import utils;
 
 // Everything here should be C ABI compatible
 extern(C) export:
@@ -15,31 +16,22 @@ extern(C) export:
 struct InNode {
     Node node;
 }
-
-InNode* inPuppetGetRootNode(InPuppet* puppet) {
-    Node root = puppet.puppet.root;
-    InNode* result = cast(InNode*)malloc(InNode.sizeof);
-    result.node = root;
-    return result;
+private {
+InNode* to_ref(ref Node b) {
+    return alloc!(Node, InNode)(b);
+}
 }
 
-void inNodeGetChildren(InNode* node, void** array_ptr, size_t* length) {
-    InNode* dummy;
-    InNode** result = cast(InNode**)malloc((*node).node.children.length * dummy.sizeof);
-    foreach (i; 0..node.node.children.length) {
-        InNode* ptr = cast(InNode*)malloc(InNode.sizeof);
-        ptr.node = node.node.children[i];
-        result[i] = ptr;
-    }
-    *array_ptr = cast(void**)result;
-    *length    = node.node.children.length;
+InNode* inPuppetGetRootNode(InPuppet* puppet) {
+    return to_ref(puppet.puppet.root);
+}
+
+void inNodeGetChildren(InNode* node, InNode*** array_ptr, size_t* length) {
+    array2carray!(Node, InNode*, to_ref)(node.node.children, *array_ptr, *length);
 }
 
 char* inNodeGetName(InNode* node) {
-    char* name = cast(char*)malloc(node.node.name.length + 1);
-    memcpy(name, node.node.name.ptr, char.sizeof * node.node.name.length);
-    name[node.node.name.length] = 0;
-    return name;
+    return str2cstr(node.node.name);
 }
 
 uint inNodeGetUUID(InNode* node) {
@@ -47,9 +39,7 @@ uint inNodeGetUUID(InNode* node) {
 }
 
 InNode* inNodeGetParent(InNode* node) {
-    InNode* result = cast(InNode*)malloc((*node).sizeof);
-    result.node = node.node.parent;
-    return result;
+    return to_ref(node.node.parent);
 }
 
 float inNodeGetZSort(InNode* node) {
@@ -61,11 +51,7 @@ bool inNodeGetLockToRoot(InNode* node) {
 }
 
 char* inNodeGetPath(InNode* node) {
-    string path = node.node.getNodePath;
-    char* name = cast(char*)malloc(path.length + 1);
-    memcpy(name, path.ptr, char.sizeof * path.length);
-    name[path.length] = 0;
-    return name;
+    return str2cstr(node.node.getNodePath);
 }
 
 bool inNodeGetEnabled(InNode* node) {
@@ -73,29 +59,20 @@ bool inNodeGetEnabled(InNode* node) {
 }
 
 char* inNodeGetTypeId(InNode* node) {
-    string type = node.node.typeId;
-    char* name = cast(char*)malloc(type.length + 1);
-    memcpy(name, type.ptr, char.sizeof * type.length);
-    name[type.length] = 0;
-    return name;
+    return str2cstr(node.node.typeId);
 }
 
 bool inNodeHasParam(InNode* node, char* name) {
-    auto len = strlen(name);
-    string dName = cast(string)name[0..len];
+    auto dName = cstr2str(name);
     return node.node.hasParam(dName);
 }
 
 float inNodeGetValue(InNode* node, char* name) {
-    auto len = strlen(name);
-    string dName = cast(string)name[0..len];
-    return node.node.getValue(dName);
+    return node.node.getValue(cstr2str(name));
 }
 
 void inNodeSetValue(InNode* node, char* name, float value) {
-    auto len = strlen(name);
-    string dName = cast(string)name[0..len];
-    node.node.setValue(dName, value);
+    node.node.setValue(cstr2str(name), value);
 }
 
 version (yesgl) {

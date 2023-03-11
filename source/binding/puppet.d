@@ -8,6 +8,7 @@ module binding.puppet;
 import binding;
 import binding.err;
 import std.stdio;
+import utils;
 
 // Everything here should be C ABI compatible
 extern(C) export:

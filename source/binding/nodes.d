@@ -5,6 +5,11 @@ import binding.err;
 import binding.puppet;
 import inochi2d;
 import utils;
+import fghj;
+
+import std.array : appender, Appender;
+import std.range.primitives : put;
+
 
 // Everything here should be C ABI compatible
 extern(C) export:
@@ -16,6 +21,7 @@ private {
 InNode* to_ref(ref Node b) {
     return alloc!(Node, InNode)(b);
 }
+
 }
 
 InNode* inPuppetGetRootNode(InPuppet* puppet) {
@@ -111,4 +117,18 @@ void inNodeGetCombinedBoundsWithUpdate(InNode* node, float* x, float* y, float* 
     *y = result.y;
     *z = result.z;
     *w = result.w;
+}
+
+void inNodeLoadJson(InNode* node, char* text) {
+    auto jsonText = cstr2str(text);
+    Fghj data = parseJson(jsonText);
+    node.node.deserializeFromFghj(data);
+}
+
+char* inNodeDumpJson(InNode* node) {
+    auto app = appender!(char[]);
+    auto serializer = inCreateSerializer(app);
+    serializer.serializeValue(node.node);
+    serializer.flush();
+    return str2cstr(cast(string)app.data);
 }

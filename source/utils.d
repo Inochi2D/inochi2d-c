@@ -1,5 +1,9 @@
 module utils;
 import inochi2d;
+
+import binding;
+import binding.err;
+
 import core.stdc.stdlib;
 import core.stdc.string;
 
@@ -37,7 +41,18 @@ void vec2array2farray(vec2[] in_arr, out float* arr, out size_t length) {
 }
 
 T2* alloc(T1, T2)(T1 obj) {
-    T2* result = cast(T2*)malloc(T2.sizeof);
-    *result = T2(obj);
+    auto result = new T2(obj);
+    GC.addRoot(result);
     return result;
+
+//    T2* result = cast(T2*)malloc(T2.sizeof);
+//    *result = T2(obj);
+//    return result;
+}
+
+void free_obj(T2)(T2* obj) {
+    GC.removeRoot(obj);
+    destroy(obj);
+
+//    free(obj);
 }

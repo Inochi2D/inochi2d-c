@@ -13,13 +13,13 @@ struct InParameter {
     Inochi2D.Parameter param;
 }
 private {
-InParameter* to_ref(ref Parameter b) {
+InParameter* to_param(ref Parameter b) {
     return alloc!(Parameter, InParameter)(b);
 }
 }
 
 void inPuppetGetParameters(InPuppet* puppet, InParameter*** array_ptr, size_t* length) {
-    array2carray!(Parameter, InParameter*, to_ref)(puppet.puppet.parameters, *array_ptr, *length);
+    array2carray!(Parameter, InParameter*, to_param)(puppet.puppet.parameters, *array_ptr, *length);
 }
 
 char* inParameterGetName(InParameter* param) {
@@ -69,4 +69,8 @@ void inParameterFindClosestKeypoint(InParameter* param, float x, float y, uint* 
     vec2u result = param.param.findClosestKeypoint(vec2(x, y));
     *index_x = result.x;
     *index_y = result.y;
+}
+
+void inParameterDestroy(InParameter* param) {
+    free_obj(param);
 }

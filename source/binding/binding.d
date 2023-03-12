@@ -18,19 +18,20 @@ struct InParameterBinding {
 };
 
 private {
-InParameterBinding* to_ref(ref ParameterBinding b) {
-    return alloc!(ParameterBinding, InParameterBinding)(b);
+InParameterBinding* to_binding(ref ParameterBinding b) {
+    auto result = alloc!(ParameterBinding, InParameterBinding)(b);
+    return result;
 }
 }
 
 void inParameterGetBindings(InParameter* param, InParameterBinding*** arr, size_t* length) {
-    array2carray!(ParameterBinding, InParameterBinding*, to_ref)(param.param.bindings, *arr, *length);
+    array2carray!(ParameterBinding, InParameterBinding*, to_binding)(param.param.bindings, *arr, *length);
 }
 
 InParameterBinding* inParameterGetBinding(InParameter* param, InNode* node, char* bindingName) {
     string name = cstr2str(bindingName);
     auto binding = param.param.getBinding(node.node, name);
-    return to_ref(binding);
+    return to_binding(binding);
 }
 
 
@@ -53,7 +54,7 @@ void inParameterBindingClear(InParameterBinding* binding) {
 /**
     Sets value at specified keypoint to the current value
 */
-void inParameterBindingSetCurrent(InParameterBinding* binding, int x, int y) {
+void inParameterBindingSetCurrent(InParameterBinding* binding, uint x, uint y) {
     auto key = vec2u(x, y);
     binding.binding.setCurrent(key);
 }
@@ -61,7 +62,7 @@ void inParameterBindingSetCurrent(InParameterBinding* binding, int x, int y) {
 /**
     Unsets value at specified keypoint
 */
-void inParameterBindingUnset(InParameterBinding* binding, int x, int y) {
+void inParameterBindingUnset(InParameterBinding* binding, uint x, uint y) {
     auto key = vec2u(x, y);
     binding.binding.unset(key);
 }
@@ -69,7 +70,7 @@ void inParameterBindingUnset(InParameterBinding* binding, int x, int y) {
 /**
     Resets value at specified keypoint to default
 */
-void inParameterBindingReset(InParameterBinding* binding, int x, int y) {
+void inParameterBindingReset(InParameterBinding* binding, uint x, uint y) {
     auto key = vec2u(x, y);
     binding.binding.reset(key);
 }
@@ -77,7 +78,7 @@ void inParameterBindingReset(InParameterBinding* binding, int x, int y) {
 /**
     Returns whether the specified keypoint is set
 */
-bool inParameterBindingIsSet(InParameterBinding* binding, int x, int y) {
+bool inParameterBindingIsSet(InParameterBinding* binding, uint x, uint y) {
     auto key = vec2u(x, y);
     return binding.binding.isSet(key);
 }
@@ -85,7 +86,7 @@ bool inParameterBindingIsSet(InParameterBinding* binding, int x, int y) {
 /**
     Scales the value, optionally with axis awareness
 */
-void inParameterBindingScaleValueAt(InParameterBinding* binding, int x, int y, int axis, float scale) {
+void inParameterBindingScaleValueAt(InParameterBinding* binding, uint x, uint y, int axis, float scale) {
     auto key = vec2u(x, y);
     binding.binding.scaleValueAt(key, axis, scale);
 }
@@ -93,7 +94,7 @@ void inParameterBindingScaleValueAt(InParameterBinding* binding, int x, int y, i
 /**
     Extrapolates the value across an axis
 */
-void inParameterBindingExtrapolateValueAt(InParameterBinding* binding, int x, int y, int axis) {
+void inParameterBindingExtrapolateValueAt(InParameterBinding* binding, uint x, uint y, int axis) {
     auto key = vec2u(x, y);
     binding.binding.extrapolateValueAt(key, axis);
 }
@@ -191,4 +192,8 @@ uint inParameterBindingGetInterpolateMode(InParameterBinding* binding) {
 */
 void inParameterBindingSetInterpolateMode(InParameterBinding* binding, uint mode) {
     binding.binding.interpolateMode(cast(InterpolateMode)mode);
+}
+
+void inParameterBindingDestroy(InParameterBinding* binding) {
+    free_obj(binding);
 }

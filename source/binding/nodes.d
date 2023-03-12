@@ -18,18 +18,18 @@ struct InNode {
     Node node;
 }
 private {
-InNode* to_ref(ref Node b) {
+InNode* to_node(ref Node b) {
     return alloc!(Node, InNode)(b);
 }
 
 }
 
 InNode* inPuppetGetRootNode(InPuppet* puppet) {
-    return to_ref(puppet.puppet.root);
+    return to_node(puppet.puppet.root);
 }
 
 void inNodeGetChildren(InNode* node, InNode*** array_ptr, size_t* length) {
-    array2carray!(Node, InNode*, to_ref)(node.node.children, *array_ptr, *length);
+    array2carray!(Node, InNode*, to_node)(node.node.children, *array_ptr, *length);
 }
 
 char* inNodeGetName(InNode* node) {
@@ -41,7 +41,7 @@ uint inNodeGetUUID(InNode* node) {
 }
 
 InNode* inNodeGetParent(InNode* node) {
-    return to_ref(node.node.parent);
+    return to_node(node.node.parent);
 }
 
 float inNodeGetZSort(InNode* node) {
@@ -131,4 +131,26 @@ char* inNodeDumpJson(InNode* node) {
     serializer.serializeValue(node.node);
     serializer.flush();
     return str2cstr(cast(string)app.data);
+}
+
+void inNodeAddChild(InNode* node, InNode* child) {
+    node.node.addChild(child.node);
+}
+
+void inNodeInsertInto(InNode* node, InNode* other, size_t offset) {
+    node.node.insertInto(other.node, offset);
+}
+
+void inNodeRemoveChild(InNode* node, InNode* child) {
+    if (child.node.parent == node.node) {
+        child.node.parent = null;
+    }
+}
+
+float* inNodeTransformMatrix(InNode* node) {
+    return null;
+}
+
+void inNodeDestroy(InNode* node) {
+    free_obj(node);
 }

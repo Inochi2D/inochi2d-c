@@ -1,21 +1,27 @@
 module binding.camera;
 import binding;
+import utils;
 
 // Everything here should be C ABI compatible
 extern(C) export:
 
 struct InCamera {
-private:
     Inochi2D.Camera camera;
+}
+
+private {
+InCamera* to_camera(ref Camera c) {
+    return alloc!(Camera, InCamera)(c);
+}
+
 }
 
 /**
     Gets the current camera
 */
 InCamera* inCameraGetCurrent() {
-    auto camera = new InCamera(Inochi2D.inGetCamera());
-    GC.addRoot(camera);
-    return camera;
+    Camera camera = Inochi2D.inGetCamera();
+    return to_camera(camera);
 }
 
 /**
@@ -45,7 +51,7 @@ void inCameraSetZoom(InCamera* camera, float zoom) {
     Gets the zoom of a camera
 */
 void inCameraGetZoom(InCamera* camera, float* zoom) {
-    *zoom = camera.camera.position.x;
+    *zoom = camera.camera.scale.x;
 }
 
 /**
@@ -78,6 +84,5 @@ void inCameraGetMatrix(InCamera* camera, const(float)* mat4) {
     Destroys a camera
 */
 void inCameraDestroy(InCamera* camera) {
-    GC.removeRoot(camera);
-    GC.collect();
+    free_obj(camera);
 }

@@ -15,7 +15,8 @@ public import core.memory;
 import core.sys.windows.windows;
 import core.sys.windows.dll;
 import bindbc.opengl;
-
+import core.stdc.stdlib;
+import utils;
 
 // This needs to be here for Windows to link properly
 version(Windows) {
@@ -33,11 +34,17 @@ extern(C) export:
     Initializes Inochi2D
 */
 void inInit(i2DTimingFuncSignature func) {
-    version(NotWindows) Runtime.initialize();
-    version(yesgl) {
-        loadOpenGL();
+
+    try {
+        version(NotWindows) Runtime.initialize();
+        version(yesgl) {
+            loadOpenGL();
+        }
+        Inochi2D.inInit(func);
+    } catch (Exception ex) {
+        import std.stdio;
+        writeln(ex);
     }
-    Inochi2D.inInit(func);
 }
 
 /**
@@ -108,4 +115,15 @@ void inBlockProtected(void function() func) {
         import std.stdio : writeln;
         writeln(ex);
     }
+}
+
+void inFreeMem(void* mem) {
+    free(mem);
+}
+
+void inFreeArray(void** mem, size_t length) {
+    for (size_t i = 0; i < length; i ++) {
+        free(mem[i]);
+    }
+    free(mem);
 }

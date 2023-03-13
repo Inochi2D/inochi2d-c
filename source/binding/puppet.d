@@ -7,14 +7,22 @@
 module binding.puppet;
 import binding;
 import binding.err;
+import std.stdio;
+import inochi2d;
+import utils;
 
 // Everything here should be C ABI compatible
 extern(C) export:
 
 struct InPuppet {
-private:
     Inochi2D.Puppet puppet;
     version(nogl) TextureBlob[] blob;
+}
+private {
+InPuppet* to_puppet(ref Puppet c) {
+    return alloc!(Puppet, InPuppet)(c);
+}
+
 }
 
 /**
@@ -22,21 +30,15 @@ private:
 */
 InPuppet* inPuppetLoad(const(char)* path) {
     try {
-        version(yesgl) {
-            auto puppet = new InPuppet(
-                Inochi2D.inLoadPuppet(cast(string)path.fromStringz)
-            );
-        } else {
-            auto puppet = new InPuppet(
-                Inochi2D.inLoadPuppet(cast(string)path.fromStringz),
-                inCurrentPuppetTextureSlots.dup
-            );
+        auto puppet = Inochi2D.inLoadPuppet(cast(string)path.fromStringz);
+        auto result = to_puppet(puppet);
+        version(nogl) {
+            result.blob = inCurrentPuppetTextureSlots.dup;
             inCurrentPuppetTextureSlots.length = 0;
         }
-
-        GC.addRoot(puppet);
-        return puppet;
+        return result;
     } catch(Exception ex) {
+        writeln(ex);
         setError(ex);
         return null;
     }
@@ -48,20 +50,13 @@ InPuppet* inPuppetLoad(const(char)* path) {
 */
 InPuppet* inPuppetLoadEx(const(char)* path, size_t length) {
     try {
-        version(yesgl) {
-            auto puppet = new InPuppet(
-                Inochi2D.inLoadPuppet(cast(string)path[0..length])
-            );
-        } else {
-            auto puppet = new InPuppet(
-                Inochi2D.inLoadPuppet(cast(string)path[0..length]),
-                inCurrentPuppetTextureSlots.dup
-            );
+        auto puppet = Inochi2D.inLoadPuppet(cast(string)path[0..length]);
+        auto result = to_puppet(puppet);
+        version(nogl) {
+            result.blob = inCurrentPuppetTextureSlots.dup;
             inCurrentPuppetTextureSlots.length = 0;
         }
-
-        GC.addRoot(puppet);
-        return puppet;
+        return result;
     } catch(Exception ex) {
         setError(ex);
         return null;
@@ -73,19 +68,13 @@ InPuppet* inPuppetLoadEx(const(char)* path, size_t length) {
 */
 InPuppet* inPuppetLoadFromMemory(ubyte* data, size_t length) {
     try {
-        version(yesgl) {
-            auto puppet = new InPuppet(
-                Inochi2D.inLoadINPPuppet(data[0..length])
-            );
-        } else {
-            auto puppet = new InPuppet(
-                Inochi2D.inLoadINPPuppet(data[0..length]),
-                inCurrentPuppetTextureSlots.dup
-            );
+        auto puppet = Inochi2D.inLoadINPPuppet(data[0..length]);
+        auto result = to_puppet(puppet);
+        version(nogl) {
+            result.blob = inCurrentPuppetTextureSlots.dup;
             inCurrentPuppetTextureSlots.length = 0;
         }
-        GC.addRoot(puppet);
-        return puppet;
+        return result;
     } catch(Exception ex) {
         setError(ex);
         return null;
@@ -96,15 +85,13 @@ InPuppet* inPuppetLoadFromMemory(ubyte* data, size_t length) {
     Destroys a puppet and unloads its
 */
 void inPuppetDestroy(InPuppet* puppet) {
-    GC.removeRoot(puppet);
-    destroy(puppet);
-    GC.collect();
+    free_obj(puppet);
 }
 
 /**
     Gets the name of a puppet (as written in metadata)
 */
-void inPuppetGetName(InPuppet* puppet, const(char)* ptr, size_t* len) {
+void inPuppetGetName(InPuppet* puppet, const(char)** ptr, size_t* len) {
     import core.stdc.string : memcpy;
     import core.stdc.stdlib : malloc;
 
@@ -113,7 +100,7 @@ void inPuppetGetName(InPuppet* puppet, const(char)* ptr, size_t* len) {
 
     const(char)* str = cast(const(char)*)malloc(puppet.puppet.meta.name.length);
     memcpy(cast(void*)str, cast(void*)puppet.puppet.meta.name.ptr, puppet.puppet.meta.name.length);
-    ptr = str;
+    *ptr = str;
     *len = puppet.puppet.meta.name.length;
 }
 
@@ -132,4 +119,8 @@ version (yesgl) {
     void inPuppetDraw(InPuppet* puppet) {
         puppet.puppet.draw();
     }
+}
+
+void inNodeResetDrivers(InPuppet* puppet) {
+    puppet.puppet.resetDrivers();
 }

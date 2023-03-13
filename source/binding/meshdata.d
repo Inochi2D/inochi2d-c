@@ -15,15 +15,15 @@ bool inDrawableGetMeshData(InNode* node, float** vertices, size_t* vertLen,
     
     MeshData data = drawable.getMesh();
     if (vertices) {
-        vec2array2farray(data.vertices, *vertices, *vertLen);
+        vec2array2farray(data.vertices, vertices, vertLen);
     }
 
     if (uvs) {
-        vec2array2farray(data.uvs, *uvs, *uvLen);
+        vec2array2farray(data.uvs, uvs, uvLen);
     }
 
     if (indices) {
-        array2carray!(ushort, ushort)(data.indices, *indices, *indLen);
+        array2carray!(ushort, ushort)(data.indices, indices, indLen);
     }
 
     if (gridAxes) {
@@ -32,10 +32,10 @@ bool inDrawableGetMeshData(InNode* node, float** vertices, size_t* vertLen,
         size_t index = 0;
 
         array2carray!(float[], float*, (float[] points) {
-            float* result;
-            array2carray!(float, float)(points, result, *(length[index++]));
+            float* result = null;
+            array2carray!(float, float)(points, &result, length[index++]);
             return result;
-        })(data.gridAxes, *gridAxes, dummy);
+        })(data.gridAxes, gridAxes, &dummy);
     }
 
     if (originX) {

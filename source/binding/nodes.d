@@ -29,7 +29,7 @@ InNode* inPuppetGetRootNode(InPuppet* puppet) {
 }
 
 void inNodeGetChildren(InNode* node, InNode*** array_ptr, size_t* length) {
-    array2carray!(Node, InNode*, to_node)(node.node.children, *array_ptr, *length);
+    array2carray!(Node, InNode*, to_node)(node.node.children, array_ptr, length);
 }
 
 char* inNodeGetName(InNode* node) {

@@ -25,7 +25,7 @@ InParameterBinding* to_binding(ref ParameterBinding b) {
 }
 
 void inParameterGetBindings(InParameter* param, InParameterBinding*** arr, size_t* length) {
-    array2carray!(ParameterBinding, InParameterBinding*, to_binding)(param.param.bindings, *arr, *length);
+    array2carray!(ParameterBinding, InParameterBinding*, to_binding)(param.param.bindings, arr, length);
 }
 
 InParameterBinding* inParameterGetBinding(InParameter* param, InNode* node, char* bindingName) {

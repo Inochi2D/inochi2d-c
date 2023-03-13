@@ -16,7 +16,7 @@ bool inDrawableGetVertices(InNode* node, float** vertices, size_t* length) {
     if (drawable is null)
         return false;
 
-    vec2array2farray(drawable.vertices, *vertices, *length);
+    vec2array2farray(drawable.vertices, vertices, length);
     return true;
 }
 

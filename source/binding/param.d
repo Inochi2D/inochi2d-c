@@ -19,7 +19,7 @@ InParameter* to_param(ref Parameter b) {
 }
 
 void inPuppetGetParameters(InPuppet* puppet, InParameter*** array_ptr, size_t* length) {
-    array2carray!(Parameter, InParameter*, to_param)(puppet.puppet.parameters, *array_ptr, *length);
+    array2carray!(Parameter, InParameter*, to_param)(puppet.puppet.parameters, array_ptr, length);
 }
 
 char* inParameterGetName(InParameter* param) {
@@ -59,10 +59,10 @@ void inParameterGetAxes(InParameter* param, float*** axes, size_t* xLength, size
     size_t dummy;
     size_t index = 0;
     array2carray!(float[], float*, (float[] points) {
-        float* result;
-        array2carray!(float, float)(points, result, *(length[index++]));
+        float* result = null;
+        array2carray!(float, float)(points, &result, length[index++]);
         return result;
-    })(param.param.axisPoints, *axes, dummy);
+    })(param.param.axisPoints, axes, &dummy);
 }
 
 void inParameterFindClosestKeypoint(InParameter* param, float x, float y, uint* index_x, uint* index_y) {

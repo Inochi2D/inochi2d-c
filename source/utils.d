@@ -23,21 +23,28 @@ T2 id(T1, T2)(ref T1 src) {
     return cast(T2)src;
 }
 
-void array2carray(T1, T2, alias Convert = id!(T1, T2))(T1[] in_arr, out T2* arr, out size_t length) {
-    T2* result = cast(T2*)malloc(in_arr.length * T2.sizeof);
-    length = in_arr.length;
-    arr = result;
-    foreach (i, a; in_arr) {
-        result[i] = Convert(a);
+void array2carray(T1, T2, alias Convert = id!(T1, T2))(T1[] in_arr, T2** arr, size_t* length) {
+    if (length !is null)
+        *length = in_arr.length;
+    if (arr !is null) {
+        T2* result;
+        import std.stdio;
+        if (*arr is null) {
+            result = cast(T2*)malloc(in_arr.length * T2.sizeof);
+            *arr = result;
+        } else {
+            result = *arr;
+        }
+        foreach (i, a; in_arr) {
+            result[i] = Convert(a);
+        }
     }
 }
 
-void vec2array2farray(vec2[] in_arr, out float* arr, out size_t length) {
-    vec2* varr;
-    size_t vlen;
-    array2carray!(vec2, vec2)(in_arr, varr, vlen);
-    arr = cast(float*)varr;
-    length = vlen * 2;
+void vec2array2farray(vec2[] in_arr, float** arr, size_t* length) {
+    array2carray!(vec2, vec2)(in_arr, cast(vec2**)arr, length);
+    if (length !is null)
+        *length *= 2;
 }
 
 T2* alloc(T1, T2)(T1 obj) {

@@ -34,7 +34,7 @@ bool inParameterBindingGetDeformation(InParameterBinding* binding, uint x, uint 
     if (deformBinding is null)
         return false;
 
-    vec2array2farray(deformBinding.values[x][y].vertexOffsets, *values, *length);
+    vec2array2farray(deformBinding.values[x][y].vertexOffsets, values, length);
     return true;
 }
 
@@ -62,9 +62,12 @@ BindingType inParameterBindingGetValue(InParameterBinding* binding, uint x, uint
     BindingType result = inParameterBindingGetType(binding);
     switch (result) {
     case BindingType.Value:
-        *values = cast(float*)malloc(float.sizeof);
-        *length = 1;
-        inParameterBindingGetFloat(binding, x, y, *values);
+        if (length)
+            *length = 1;
+        if (values) {
+            *values = cast(float*)malloc(float.sizeof);
+            inParameterBindingGetFloat(binding, x, y, *values);
+        }
         break;
     case BindingType.Deformation:
         inParameterBindingGetDeformation(binding, x, y, values, length);

@@ -125,10 +125,13 @@ void inNodeLoadJson(InNode* node, char* text) {
     node.node.deserializeFromFghj(data);
 }
 
-char* inNodeDumpJson(InNode* node) {
+char* inNodeDumpJson(InNode* node, bool recursive) {
     auto app = appender!(char[]);
     auto serializer = inCreateSerializer(app);
-    serializer.serializeValue(node.node);
+//    serializer.serializeValue(node.node);
+    uint state = serializer.objectBegin();
+    node.node.serializePartial(serializer, recursive);
+    serializer.objectEnd(state);
     serializer.flush();
     return str2cstr(cast(string)app.data);
 }

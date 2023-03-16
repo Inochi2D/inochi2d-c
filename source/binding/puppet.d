@@ -104,6 +104,15 @@ void inPuppetGetName(InPuppet* puppet, const(char)** ptr, size_t* len) {
     *len = puppet.puppet.meta.name.length;
 }
 
+bool inPuppetGetEnableDrivers(InPuppet* puppet) {
+    return puppet.puppet.enableDrivers;
+}
+
+void inPuppetSetEnableDrivers(InPuppet* puppet, bool value) {
+    puppet.puppet.enableDrivers = value;
+    puppet.puppet.resetDrivers();
+}
+
 /**
     Update puppet
 */

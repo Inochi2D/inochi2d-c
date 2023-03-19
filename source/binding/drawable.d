@@ -96,3 +96,17 @@ bool inDrawableDrawMeshPoints(InNode* node) {
     drawable.drawMeshPoints();
     return true;
 }
+
+bool inDrawableGetDynamicMatrix(InNode* node, float* mat4) {
+    import core.stdc.string : memcpy;
+    Drawable drawable = cast(Drawable)node.node;
+    if (drawable is null) {
+        auto matrix = drawable.transform.matrix;
+        memcpy(cast(void*)mat4, matrix.ptr, float.sizeof*16);
+        return true;
+    }
+
+    auto matrix = drawable.getDynamicMatrix();
+    memcpy(cast(void*)mat4, matrix.ptr, float.sizeof*16);
+    return true;
+}

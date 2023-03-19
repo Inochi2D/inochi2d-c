@@ -86,3 +86,10 @@ void inCameraGetMatrix(InCamera* camera, const(float)* mat4) {
 void inCameraDestroy(InCamera* camera) {
     free_obj(camera);
 }
+
+void inCameraGetScreenToGlobalMatrix(InCamera* camera, const(float)* mat) {
+    auto center = camera.camera.getCenterOffset();
+    auto matrix = mat4.translation(- (center.x + camera.camera.position.x), (center.y + camera.camera.position.y), 0) * mat4.scaling(1 / camera.camera.scale.x, -1 / camera.camera.scale.y, 0);
+    import core.stdc.string : memcpy;
+    memcpy(cast(void*)mat, matrix.ptr, float.sizeof*16);
+}

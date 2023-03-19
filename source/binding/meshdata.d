@@ -5,6 +5,8 @@ import utils;
 import core.stdc.string;
 import binding.nodes;
 
+extern(C) export:
+
 bool inDrawableGetMeshData(InNode* node, float** vertices, size_t* vertLen, 
                            float** uvs, size_t* uvLen, ushort** indices, size_t* indLen, 
                            float*** gridAxes, size_t* axesLenX, size_t* axesLenY, 
@@ -14,17 +16,9 @@ bool inDrawableGetMeshData(InNode* node, float** vertices, size_t* vertLen,
         return false;
     
     MeshData data = drawable.getMesh();
-    if (vertices) {
-        vec2array2farray(data.vertices, vertices, vertLen);
-    }
-
-    if (uvs) {
-        vec2array2farray(data.uvs, uvs, uvLen);
-    }
-
-    if (indices) {
-        array2carray!(ushort, ushort)(data.indices, indices, indLen);
-    }
+    vec2array2farray(data.vertices, vertices, vertLen);
+    vec2array2farray(data.uvs, uvs, uvLen);
+    array2carray!(ushort, ushort)(data.indices, indices, indLen);
 
     if (gridAxes) {
         size_t*[2] length = [axesLenY, axesLenX];
@@ -38,13 +32,8 @@ bool inDrawableGetMeshData(InNode* node, float** vertices, size_t* vertLen,
         })(data.gridAxes, gridAxes, &dummy);
     }
 
-    if (originX) {
-        *originX = data.origin.x;
-    }
-
-    if (originY) {
-        *originY = data.origin.y;
-    }
+    if (originX) *originX = data.origin.x;
+    if (originY) *originY = data.origin.y;
 
     return true;
 }
@@ -90,5 +79,6 @@ bool inDrawableSetMeshData(InNode* node, float* vertices, size_t vertLen,
         data.origin.y = *originY;
     }
 
+    drawable.rebuffer(data);
     return true;
 }

@@ -26,7 +26,12 @@ bool inParameterBindingSetFloat(InParameterBinding* binding, uint x, uint y, flo
         return false;
     
     floatBinding.values[x][y] = value;
+    floatBinding.isSet_[x][y] = true;
     return true;
+}
+
+void inParameterBindingClearValue(InParameterBinding* binding, uint x, uint y) {
+    binding.binding.getIsSet()[x][y] = false;
 }
 
 bool inParameterBindingGetDeformation(InParameterBinding* binding, uint x, uint y, float** values, size_t* length) {
@@ -45,6 +50,7 @@ bool inParameterBindingSetDeformation(InParameterBinding* binding, uint x, uint 
 
     deformBinding.values[x][y].vertexOffsets.length = length / 2;
     memcpy(deformBinding.values[x][y].vertexOffsets.ptr, values, length * float.sizeof);
+    deformBinding.isSet_[x][y] = true;
     return true;
 }
 

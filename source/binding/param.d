@@ -2,7 +2,9 @@ module binding.param;
 
 import binding;
 import binding.err;
+import binding.nodes: InNode;
 import binding.puppet;
+import binding.binding;
 import inochi2d;
 import utils;
 
@@ -71,6 +73,38 @@ void inParameterFindClosestKeypoint(InParameter* param, float x, float y, uint* 
     *index_y = result.y;
 }
 
+void inParameterFindClosestKeypointAtCurrent(InParameter* param, uint* index_x, uint* index_y) {
+    vec2u result = param.param.findClosestKeypoint();
+    *index_x = result.x;
+    *index_y = result.y;
+}
+
 void inParameterDestroy(InParameter* param) {
     free_obj(param);
+}
+
+InParameterBinding* inParameterGetBinding(InParameter* param, InNode* node, char* bindingName) {
+    string name = cstr2str(bindingName);
+    auto binding = param.param.getBinding(node.node, name);
+    return to_binding(binding);
+}
+
+InParameterBinding* inParameterCreateBinding(InParameter* param, InNode* node, char* bindingName) {
+    string name = cstr2str(bindingName);
+    auto binding = param.param.createBinding(node.node, name);
+    return to_binding(binding);
+}
+
+InParameterBinding* inParameterGetOrAddBinding(InParameter* param, InNode* node, char* bindingName) {
+    string name = cstr2str(bindingName);
+    auto binding = param.param.getOrAddBinding(node.node, name);
+    return to_binding(binding);
+}
+
+void inParameterAddBinding(InParameter* param, InParameterBinding* binding) {
+    param.param.addBinding(binding.binding);
+}
+
+void inParameterRemoveBinding(InParameter* param, InParameterBinding* binding) {
+    param.param.removeBinding(binding.binding);
 }

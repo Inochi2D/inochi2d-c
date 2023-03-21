@@ -100,7 +100,8 @@ bool inDrawableDrawMeshPoints(InNode* node) {
 bool inDrawableGetDynamicMatrix(InNode* node, float* mat4) {
     import core.stdc.string : memcpy;
     Drawable drawable = cast(Drawable)node.node;
-    if (drawable is null) {
+    MeshGroup group   = cast(MeshGroup)node.node;
+    if (drawable is null || group !is null) {
         auto matrix = drawable.transform.matrix;
         memcpy(cast(void*)mat4, matrix.ptr, float.sizeof*16);
         return true;

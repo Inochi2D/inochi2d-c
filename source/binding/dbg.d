@@ -74,6 +74,10 @@ void inDbgSetBufferWithIndices(float* _points, size_t point_length, ushort* _ind
 void inDbgDrawPoints(float* _color, float* _mat4) {
     vec4 color;
     color = *cast(vec4*)_color;
+    if (_mat4 is null) {
+        inochi2d.inDbgDrawPoints(color);
+        return;
+    }
     mat4 matrix = *cast(mat4*)_mat4;
     inochi2d.inDbgDrawPoints(color, matrix);
 }
@@ -84,6 +88,10 @@ void inDbgDrawPoints(float* _color, float* _mat4) {
 void inDbgDrawLines(float* _color, float* _mat4) {
     vec4 color;
     color = *cast(vec4*)_color;
+    if (_mat4 is null) {
+        inochi2d.inDbgDrawLines(color);
+        return;
+    }
     mat4 matrix = *cast(mat4*)_mat4;
     inochi2d.inDbgDrawLines(color, matrix);
 }

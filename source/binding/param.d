@@ -108,3 +108,7 @@ void inParameterAddBinding(InParameter* param, InParameterBinding* binding) {
 void inParameterRemoveBinding(InParameter* param, InParameterBinding* binding) {
     param.param.removeBinding(binding.binding);
 }
+
+void inParameterReset(InParameter* param) {
+    param.param.value = param.param.defaults;
+}

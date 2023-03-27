@@ -102,7 +102,7 @@ bool inDrawableGetDynamicMatrix(InNode* node, float* mat4) {
     Drawable drawable = cast(Drawable)node.node;
     MeshGroup group   = cast(MeshGroup)node.node;
     if (drawable is null || group !is null) {
-        auto matrix = drawable.transform.matrix;
+        auto matrix = node.node.transform.matrix;
         memcpy(cast(void*)mat4, matrix.ptr, float.sizeof*16);
         return true;
     }

@@ -39,9 +39,9 @@ bool inDrawableGetMeshData(InNode* node, float** vertices, size_t* vertLen,
 }
 
 
-bool inDrawableSetMeshData(InNode* node, float* vertices, size_t vertLen, 
-                           float* uvs, size_t uvLen, float* indices, size_t indLen, 
-                           float** gridAxes, size_t axesLenX, size_t axesLenY, 
+bool inDrawableSetMeshData(InNode* node, float* vertices, uint vertLen, 
+                           float* uvs, uint uvLen, ushort* indices, uint indLen, 
+                           float** gridAxes, uint axesLenX, uint axesLenY, 
                            float* originX, float* originY) {
     auto drawable = cast(Drawable)node.node;
     if (drawable is null)
@@ -60,7 +60,7 @@ bool inDrawableSetMeshData(InNode* node, float* vertices, size_t vertLen,
 
     if (indices) {
         data.indices.length = indLen;
-        memcpy(data.indices.ptr, uvs, indLen * ushort.sizeof);
+        memcpy(data.indices.ptr, indices, indLen * ushort.sizeof);
     }
 
     if (gridAxes) {

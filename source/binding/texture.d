@@ -17,15 +17,13 @@ struct InTexture {
 struct InShallowTexture {
     ShallowTexture texture;
 }
-private {
+
 InTexture* to_texture(ref Texture c) {
     return alloc!(Texture, InTexture)(c);
 }
 
 InShallowTexture* to_stexture(ref ShallowTexture c) {
     return alloc!(ShallowTexture, InShallowTexture)(c);
-}
-
 }
 
 InTexture* inPuppetGetTexture(InPuppet* puppet, uint id) {

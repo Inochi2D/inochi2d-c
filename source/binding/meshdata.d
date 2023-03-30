@@ -79,6 +79,10 @@ bool inDrawableSetMeshData(InNode* node, float* vertices, uint vertLen,
         data.origin.y = *originY;
     }
 
+    if (auto mgroup = cast(MeshGroup)node.node) {
+        mgroup.clearCache();
+    }
+
     drawable.rebuffer(data);
     return true;
 }

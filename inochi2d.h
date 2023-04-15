@@ -4,6 +4,7 @@
     
     Authors: Luna Nielsen
 */
+#include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
 
@@ -13,6 +14,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+    typedef uint32_t uint;
 
     struct InError {
         size_t len;
@@ -30,8 +32,8 @@ extern "C" {
     void inCleanup();
     void inUpdate();
     void inBlockProtected(void (*func)());
-    void inViewportSet(float width, float height);
-    void inViewportGet(float* width, float* height);
+    void inViewportSet(uint width, uint height);
+    void inViewportGet(uint* width, uint* height);
     #ifdef INOCHI2D_GLYES
         void inSceneBegin();
         void inSceneEnd();
@@ -60,6 +62,30 @@ extern "C" {
         void inPuppetDraw(InPuppet* puppet);
     #endif
 
+    // Inochi2D Puppet Parameters
+    typedef struct InParameter InParameter;
+    void inPuppetGetParameters(InPuppet* puppet, InParameter*** array_ptr, size_t* length);
+    char* inParameterGetName(InParameter* param);
+    void inParameterGetValue(InParameter* param, float* x, float* y);
+    void inParameterSetValue(InParameter* param, float x, float y);
+    uint inParameterGetUUID(InParameter* param);
+    bool inParameterIsVec2(InParameter* param);
+    void inParameterGetMin(InParameter* param, float* xmin, float* ymin);
+    void inParameterGetMax(InParameter* param, float* xmax, float* ymax);
+    void inParameterGetAxes(InParameter* param, float*** axes, size_t* xLength, size_t* yLength);
+    void inParameterFindClosestKeypoint(InParameter* param, float x, float y, uint* index_x, uint* index_y);
+    void inParameterFindClosestKeypointAtCurrent(InParameter* param, uint* index_x, uint* index_y);
+    void inParameterDestroy(InParameter* param);
+    void inParameterReset(InParameter* param);
+
+    // Inochi2D Puppet Parameter Bindings
+    typedef struct InNode InNode;
+    typedef struct InParameterBinding InParameterBinding;
+    InParameterBinding* inParameterGetBinding(InParameter* param, InNode* node, char* bindingName);
+    InParameterBinding* inParameterCreateBinding(InParameter* param, InNode* node, char* bindingName);
+    InParameterBinding* inParameterGetOrAddBinding(InParameter* param, InNode* node, char* bindingName);
+    void inParameterAddBinding(InParameter* param, InParameterBinding* binding);
+    void inParameterRemoveBinding(InParameter* param, InParameterBinding* binding);
 
 #ifdef __cplusplus
 }

@@ -16,7 +16,10 @@ import core.sys.windows.windows;
 import core.sys.windows.dll;
 import bindbc.opengl;
 import core.stdc.stdlib;
+import std.datetime.systime;
 import utils;
+
+import std.stdio;
 
 // This needs to be here for Windows to link properly
 version(Windows) {
@@ -26,6 +29,12 @@ version(Windows) {
 }
 
 alias i2DTimingFuncSignature = double function();
+
+double currTime() {
+    auto t = Clock.currTime;
+    double result = (t.toUnixTime() + t.fracSecs.total!"msecs" * 0.001);
+    return result;
+}
 
 // Everything here should be C ABI compatible
 extern(C) export:
@@ -40,7 +49,11 @@ void inInit(i2DTimingFuncSignature func) {
         version(yesgl) {
             loadOpenGL();
         }
-        Inochi2D.inInit(func);
+        if (func is null) {
+            Inochi2D.inInit(&currTime);
+        }
+        else
+            Inochi2D.inInit(func);
     } catch (Exception ex) {
         import std.stdio;
         writeln(ex);

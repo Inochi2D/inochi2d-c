@@ -77,6 +77,38 @@ void inNodeSetValue(InNode* node, char* name, float value) {
     node.node.setValue(cstr2str(name), value);
 }
 
+void inNodeGetTranslation(InNode* node, float*x, float* y, float *z) {
+    auto tran = node.node.localTransform.translation;
+    *x = tran.x;
+    *y = tran.y;
+    *z = tran.z;
+}
+
+void inNodeGetRotation(InNode* node, float*x, float* y, float* z) {
+    auto rot = node.node.localTransform.rotation;
+    *x = rot.x;
+    *y = rot.y;
+    *z = rot.z;
+}
+
+void inNodeGetScale(InNode* node, float*x, float* y, float* z) {
+    auto scale = node.node.localTransform.scale;
+    *x = scale.x;
+    *y = scale.y;
+}
+
+void inNodeSetTranslation(InNode* node, float x, float y, float z) {
+    node.node.localTransform.translation = vec3(x, y, z);
+}
+
+void inNodeSetRotation(InNode* node, float x, float y, float z) {
+    node.node.localTransform.rotation = vec3(x, y, z);
+}
+
+void inNodeSetScale(InNode* node, float x, float y) {
+    node.node.localTransform.scale = vec2(x, y);
+}
+
 version (yesgl) {
 
     /**
@@ -125,10 +157,13 @@ void inNodeLoadJson(InNode* node, char* text) {
     node.node.deserializeFromFghj(data);
 }
 
-char* inNodeDumpJson(InNode* node) {
+char* inNodeDumpJson(InNode* node, bool recursive) {
     auto app = appender!(char[]);
     auto serializer = inCreateSerializer(app);
-    serializer.serializeValue(node.node);
+//    serializer.serializeValue(node.node);
+    uint state = serializer.objectBegin();
+    node.node.serializePartial(serializer, recursive);
+    serializer.objectEnd(state);
     serializer.flush();
     return str2cstr(cast(string)app.data);
 }
@@ -147,8 +182,16 @@ void inNodeRemoveChild(InNode* node, InNode* child) {
     }
 }
 
-float* inNodeTransformMatrix(InNode* node) {
-    return null;
+void inNodeGetTransformMatrix(InNode* node, float* mat4) {
+    import core.stdc.string : memcpy;
+    auto matrix = node.node.transform.matrix;
+    memcpy(cast(void*)mat4, matrix.ptr, float.sizeof*16);
+}
+
+void inNodeGetLocalTransformMatrix(InNode* node, float* mat4) {
+    import core.stdc.string : memcpy;
+    auto matrix = node.node.localTransform.matrix;
+    memcpy(cast(void*)mat4, matrix.ptr, float.sizeof*16);
 }
 
 void inNodeDestroy(InNode* node) {

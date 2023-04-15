@@ -15,8 +15,10 @@ char* str2cstr(string str) {
 }
 
 string cstr2str(char* cstr) {
-    size_t len = strlen(cstr);
-    return cast(string)cstr[0..len];
+    char[] result;
+    result.length = strlen(cstr);
+    memcpy(result.ptr, cstr, result.length);
+    return cast(string)result;
 }
 
 T2 id(T1, T2)(ref T1 src) {

@@ -17,23 +17,14 @@ struct InParameterBinding {
     ParameterBinding binding;
 };
 
-private {
 InParameterBinding* to_binding(ref ParameterBinding b) {
     auto result = alloc!(ParameterBinding, InParameterBinding)(b);
     return result;
-}
 }
 
 void inParameterGetBindings(InParameter* param, InParameterBinding*** arr, size_t* length) {
     array2carray!(ParameterBinding, InParameterBinding*, to_binding)(param.param.bindings, arr, length);
 }
-
-InParameterBinding* inParameterGetBinding(InParameter* param, InNode* node, char* bindingName) {
-    string name = cstr2str(bindingName);
-    auto binding = param.param.getBinding(node.node, name);
-    return to_binding(binding);
-}
-
 
 /**
     Apply a binding to the model at the given parameter value

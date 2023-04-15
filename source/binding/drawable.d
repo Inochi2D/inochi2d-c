@@ -11,6 +11,10 @@ import utils;
 // Everything here should be C ABI compatible
 extern(C) export:
 
+void inSetUpdateBounds(bool state) {
+    inochi2d.inSetUpdateBounds(state);
+}
+
 bool inDrawableGetVertices(InNode* node, float** vertices, size_t* length) {
     Drawable drawable = cast(Drawable)node.node;
     if (drawable is null)
@@ -27,6 +31,15 @@ bool inDrawableSetVertices(InNode* node, float* vertices, size_t length) {
 
     drawable.vertices.length = length / 2;
     memcpy(drawable.vertices.ptr, vertices, length * float.sizeof);
+    return true;
+}
+
+bool inDrawableGetDeformation(InNode* node, float** deformation, size_t* length) {
+    Drawable drawable = cast(Drawable)node.node;
+    if (drawable is null)
+        return false;
+
+    vec2array2farray(drawable.deformation, deformation, length);
     return true;
 }
 
@@ -57,4 +70,44 @@ bool inDrawableReset(InNode* node) {
     return true;
 }
 
-// void rebuffer(ref MeshData)
+bool inDrawableDrawBounds(InNode* node) {
+    Drawable drawable = cast(Drawable)node.node;
+    if (drawable is null)
+        return false;
+
+    drawable.drawBounds();
+    return true;
+}
+
+bool inDrawableDrawMeshLines(InNode* node) {
+    Drawable drawable = cast(Drawable)node.node;
+    if (drawable is null)
+        return false;
+
+    drawable.drawMeshLines();
+    return true;
+}
+
+bool inDrawableDrawMeshPoints(InNode* node) {
+    Drawable drawable = cast(Drawable)node.node;
+    if (drawable is null)
+        return false;
+
+    drawable.drawMeshPoints();
+    return true;
+}
+
+bool inDrawableGetDynamicMatrix(InNode* node, float* mat4) {
+    import core.stdc.string : memcpy;
+    Drawable drawable = cast(Drawable)node.node;
+    MeshGroup group   = cast(MeshGroup)node.node;
+    if (drawable is null || group !is null) {
+        auto matrix = node.node.transform.matrix;
+        memcpy(cast(void*)mat4, matrix.ptr, float.sizeof*16);
+        return true;
+    }
+
+    auto matrix = drawable.getDynamicMatrix();
+    memcpy(cast(void*)mat4, matrix.ptr, float.sizeof*16);
+    return true;
+}

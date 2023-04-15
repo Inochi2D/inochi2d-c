@@ -33,6 +33,39 @@ Use `inDestroyPuppet` to destroy a puppet when it no longer is needed.
     inDestroyPuppet(puppet);
 ```
 
+## Getting arrays from Inochi2D
+
+Such functions take arguments including two: `Type** arr_ptr, size_t* len_ptr`:
+
+0) If arr_ptr == null, length is written into `*len_ptr`. End.
+1) If *arr_ptr == null, an array allocated by D is written into `*arr_ptr`.
+2) Otherwise, fill the buffer passed by 'arr_ptr' with length.
+
+User can use these in following way.
+
+0) D manages the memory: Call function with `*arr_ptr==NULL`.
+1) C manges the memory:
+    
+    1) call function with `arr_ptr==NULL`. function returns length of the buffer.
+    2) call function with array pre-allocated (`*buff != NULL`) given the length. function fills values to provided array.
+    
+Example:
+
+```c
+struct {
+    size_t len;
+    InParameter **cont;
+} parameters;
+// let D allocate memory
+parameters.cont = NULL;
+inPuppetGetParameters(myPuppet, &parameters.cont, &parameters.len);
+for (size_t i = 0; i < parameters.len; i++) {
+    char *name = inParameterGetName(parameters.cont[i]);
+    bool isVec2 = inParameterIsVec2(parameters.cont[i]);
+    printf("Parameter #%zu: %s is%s vec2.\n", i, name, isVec2 ? "" : " not");
+}
+```
+
 ## Using Inochi2D with your own renderer
 Inochi2D requires the following GPU accellerated features to be present:
  * Framebuffer support (Inochi2D needs 2)

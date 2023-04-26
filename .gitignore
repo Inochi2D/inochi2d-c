@@ -14,3 +14,6 @@ inochi2d-c-test-*
 *.obj
 *.lst
 out/
+bootstrap
+*.inx
+*.inp

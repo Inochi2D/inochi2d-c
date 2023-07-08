@@ -11,9 +11,15 @@
 #ifndef H_INOCHI2D
 #define H_INOCHI2D
 
-
-#ifdef _MSC_VER
-    #define EXPORT_I2D __cdecl
+// Handle calling convention on Windows.
+// This will ensure MSVC does not try to use stdcall
+// when the D library uses cdecl.
+#ifdef _WIN32
+    #ifdef _MSC_VER
+        #define EXPORT_I2D __cdecl
+    #else
+        #define EXPORT_I2D
+    #endif
 #else
     #define EXPORT_I2D
 #endif

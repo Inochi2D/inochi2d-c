@@ -11,6 +11,13 @@
 #ifndef H_INOCHI2D
 #define H_INOCHI2D
 
+
+#ifdef _MSC_VER
+    #define EXPORT_I2D __cdecl
+#else
+    #define EXPORT_I2D
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -21,71 +28,71 @@ extern "C" {
         const char* msg;
     };
     typedef struct InError InError;
-    InError* inErrorGet();
+    EXPORT_I2D InError* inErrorGet();
 
     typedef struct InPuppet InPuppet;
     typedef struct InCamera InCamera;
     typedef struct InRenderable InRenderable;
 
     // Inochi2D runtime functionality
-    void inInit(double (*timingFunc)());
-    void inCleanup();
-    void inUpdate();
-    void inBlockProtected(void (*func)());
-    void inViewportSet(uint width, uint height);
-    void inViewportGet(uint* width, uint* height);
+    EXPORT_I2D void inInit(double (*timingFunc)());
+    EXPORT_I2D void inCleanup();
+    EXPORT_I2D void inUpdate();
+    EXPORT_I2D void inBlockProtected(void (*func)());
+    EXPORT_I2D void inViewportSet(uint width, uint height);
+    EXPORT_I2D void inViewportGet(uint* width, uint* height);
     #ifdef INOCHI2D_GLYES
-        void inSceneBegin();
-        void inSceneEnd();
-        void inSceneDraw(float x, float y, float width, float height);
+        EXPORT_I2D void inSceneBegin();
+        EXPORT_I2D void inSceneEnd();
+        EXPORT_I2D void inSceneDraw(float x, float y, float width, float height);
     #endif
 
     // Inochi2D Cameras
-    InCamera* inCameraGetCurrent();
-    void inCameraDestroy(InCamera* camera);
-    void inCameraGetPosition(InCamera* camera, float* x, float* y);
-    void inCameraSetPosition(InCamera* camera, float x, float y);
-    void inCameraGetZoom(InCamera* camera, float* zoom);
-    void inCameraSetZoom(InCamera* camera, float zoom);
-    void inCameraGetCenterOffset(InCamera* camera, float* x, float* y);
-    void inCameraGetRealSize(InCamera* camera, float* x, float* y);
-    void inCameraGetMatrix(InCamera* camera, float* mat4); // NOTE: mat4 array needs to be 16 elements long.
+    EXPORT_I2D InCamera* inCameraGetCurrent();
+    EXPORT_I2D void inCameraDestroy(InCamera* camera);
+    EXPORT_I2D void inCameraGetPosition(InCamera* camera, float* x, float* y);
+    EXPORT_I2D void inCameraSetPosition(InCamera* camera, float x, float y);
+    EXPORT_I2D void inCameraGetZoom(InCamera* camera, float* zoom);
+    EXPORT_I2D void inCameraSetZoom(InCamera* camera, float zoom);
+    EXPORT_I2D void inCameraGetCenterOffset(InCamera* camera, float* x, float* y);
+    EXPORT_I2D void inCameraGetRealSize(InCamera* camera, float* x, float* y);
+    EXPORT_I2D void inCameraGetMatrix(InCamera* camera, float* mat4); // NOTE: mat4 array needs to be 16 elements long.
 
     // Inochi2D Puppets
-    InPuppet* inPuppetLoad(const char *path);
-    InPuppet* inPuppetLoadEx(const char *path, size_t length);
-    InPuppet* inPuppetLoadFromMemory(uint8_t* data, size_t length);
-    void inPuppetDestroy(InPuppet* puppet);
-    void inPuppetGetName(InPuppet* puppet, const char *text, size_t *len);
-    void inPuppetUpdate(InPuppet* puppet);
+    EXPORT_I2D InPuppet* inPuppetLoad(const char *path);
+    EXPORT_I2D InPuppet* inPuppetLoadEx(const char *path, size_t length);
+    EXPORT_I2D InPuppet* inPuppetLoadFromMemory(uint8_t* data, size_t length);
+    EXPORT_I2D void inPuppetDestroy(InPuppet* puppet);
+    EXPORT_I2D void inPuppetGetName(InPuppet* puppet, const char *text, size_t *len);
+    EXPORT_I2D void inPuppetUpdate(InPuppet* puppet);
     #ifdef INOCHI2D_GLYES
-        void inPuppetDraw(InPuppet* puppet);
+        EXPORT_I2D void inPuppetDraw(InPuppet* puppet);
     #endif
 
     // Inochi2D Puppet Parameters
     typedef struct InParameter InParameter;
-    void inPuppetGetParameters(InPuppet* puppet, InParameter*** array_ptr, size_t* length);
-    char* inParameterGetName(InParameter* param);
-    void inParameterGetValue(InParameter* param, float* x, float* y);
-    void inParameterSetValue(InParameter* param, float x, float y);
-    uint inParameterGetUUID(InParameter* param);
-    bool inParameterIsVec2(InParameter* param);
-    void inParameterGetMin(InParameter* param, float* xmin, float* ymin);
-    void inParameterGetMax(InParameter* param, float* xmax, float* ymax);
-    void inParameterGetAxes(InParameter* param, float*** axes, size_t* xLength, size_t* yLength);
-    void inParameterFindClosestKeypoint(InParameter* param, float x, float y, uint* index_x, uint* index_y);
-    void inParameterFindClosestKeypointAtCurrent(InParameter* param, uint* index_x, uint* index_y);
-    void inParameterDestroy(InParameter* param);
-    void inParameterReset(InParameter* param);
+    EXPORT_I2D void inPuppetGetParameters(InPuppet* puppet, InParameter*** array_ptr, size_t* length);
+    EXPORT_I2D char* inParameterGetName(InParameter* param);
+    EXPORT_I2D void inParameterGetValue(InParameter* param, float* x, float* y);
+    EXPORT_I2D void inParameterSetValue(InParameter* param, float x, float y);
+    EXPORT_I2D uint inParameterGetUUID(InParameter* param);
+    EXPORT_I2D bool inParameterIsVec2(InParameter* param);
+    EXPORT_I2D void inParameterGetMin(InParameter* param, float* xmin, float* ymin);
+    EXPORT_I2D void inParameterGetMax(InParameter* param, float* xmax, float* ymax);
+    EXPORT_I2D void inParameterGetAxes(InParameter* param, float*** axes, size_t* xLength, size_t* yLength);
+    EXPORT_I2D void inParameterFindClosestKeypoint(InParameter* param, float x, float y, uint* index_x, uint* index_y);
+    EXPORT_I2D void inParameterFindClosestKeypointAtCurrent(InParameter* param, uint* index_x, uint* index_y);
+    EXPORT_I2D void inParameterDestroy(InParameter* param);
+    EXPORT_I2D void inParameterReset(InParameter* param);
 
     // Inochi2D Puppet Parameter Bindings
     typedef struct InNode InNode;
     typedef struct InParameterBinding InParameterBinding;
-    InParameterBinding* inParameterGetBinding(InParameter* param, InNode* node, char* bindingName);
-    InParameterBinding* inParameterCreateBinding(InParameter* param, InNode* node, char* bindingName);
-    InParameterBinding* inParameterGetOrAddBinding(InParameter* param, InNode* node, char* bindingName);
-    void inParameterAddBinding(InParameter* param, InParameterBinding* binding);
-    void inParameterRemoveBinding(InParameter* param, InParameterBinding* binding);
+    EXPORT_I2D InParameterBinding* inParameterGetBinding(InParameter* param, InNode* node, char* bindingName);
+    EXPORT_I2D InParameterBinding* inParameterCreateBinding(InParameter* param, InNode* node, char* bindingName);
+    EXPORT_I2D InParameterBinding* inParameterGetOrAddBinding(InParameter* param, InNode* node, char* bindingName);
+    EXPORT_I2D void inParameterAddBinding(InParameter* param, InParameterBinding* binding);
+    EXPORT_I2D void inParameterRemoveBinding(InParameter* param, InParameterBinding* binding);
 
 #ifdef __cplusplus
 }

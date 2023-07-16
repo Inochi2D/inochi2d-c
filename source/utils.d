@@ -69,7 +69,7 @@ T2* alloc(T1, T2)(T1 obj) {
 
 void free_obj(T2)(T2* obj) {
     GC.removeRoot(obj);
-    destroy(obj);
+    destroy!false(obj);
 
 //    free(obj);
 }

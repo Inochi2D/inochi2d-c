@@ -44,7 +44,7 @@ Such functions take arguments including two: `Type** arr_ptr, size_t* len_ptr`:
 User can use these in following way.
 
 0) D manages the memory: Call function with `*arr_ptr==NULL`.
-1) C manges the memory:
+1) C manages the memory:
     
     1) call function with `arr_ptr==NULL`. function returns length of the buffer.
     2) call function with array pre-allocated (`*buff != NULL`) given the length. function fills values to provided array.
